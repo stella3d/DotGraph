@@ -31,7 +31,7 @@ public class BasicGraphManager : MonoBehaviour
 	
 	NativeArray<int2> m_MinAndMaxOutput;
 
-	BasicGraph m_Graph;
+	Graph m_Graph;
 	
 	JobHandle m_CreationJobHandle;
 	JobHandle m_MagnitudeJobHandle;
@@ -48,7 +48,7 @@ public class BasicGraphManager : MonoBehaviour
 		Debug.Log("Edge count: " + m_EdgeCount);
 		Debug.Log("Vertex count: " + m_VertexCount);
 		
-		m_Graph = new BasicGraph(m_VertexCount, m_EdgeCount);
+		m_Graph = new Graph(m_VertexCount, m_EdgeCount);
 		m_EdgeMagnitudes = new NativeArray<float>(m_VertexCount, Allocator.Persistent);
 		m_VerticesSeed = new NativeArray<float3>(m_VertexCount, Allocator.Persistent);
 		m_VertexDegrees = new NativeArray<int>(m_VertexCount, Allocator.Persistent);
@@ -59,7 +59,7 @@ public class BasicGraphManager : MonoBehaviour
 			m_VerticesSeed[i] = new float3(Random.onUnitSphere * m_SeedRadius);
 		}
 
-		m_Graph.RandomizeEdges();
+		//m_Graph.RandomizeEdges();
 		
 		m_DegreeCalculationJob = new VertexDegreeCalculationJob();
 
@@ -118,7 +118,7 @@ public class BasicGraphManager : MonoBehaviour
 		m_CreationJobHandle.Complete();
 		m_DegreeCalculationJobHandle.Complete();
 		
-		m_Graph.RandomizeEdges();
+		//m_Graph.RandomizeEdges();
 
 		Debug.Log("regenerating random graph edges");
 	}

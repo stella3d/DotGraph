@@ -15,6 +15,11 @@ public class SubGraph : IDisposable
     /// The edges in our graph.  Each int is an index into the VertexIDs array
     /// </summary>
     public NativeArray<int2> EdgesByLocalIndex;
+    
+    /// <summary>
+    /// The edges in our graph.  Each int is a vertex id in the root graph
+    /// </summary>
+    public NativeArray<int2> EdgesByGlobalId;
 
     public int order;
     public int size;
@@ -38,6 +43,18 @@ public class SubGraph : IDisposable
         size = edges.Length;
         VertexIds = new NativeArray<int>(order, Allocator.Persistent);
         EdgesByLocalIndex = new NativeArray<int2>(size, Allocator.Persistent);
+    }
+    
+    public SubGraph(int[] vertexIDs, NativeArray<int2> edges)
+    {
+        order = vertexIDs.Length;
+        size = edges.Length;
+        VertexIds = new NativeArray<int>(vertexIDs, Allocator.Persistent);
+        
+        // copy the edges represented as root vertex IDs
+        EdgesByGlobalId = new NativeArray<int2>(edges, Allocator.Persistent);
+        // then allocate enough space to translate them into local indices
+        EdgesByLocalIndex = new NativeArray<int2>(edges.Length, Allocator.Persistent);
     }
 
     public void Dispose()

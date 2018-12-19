@@ -26,10 +26,7 @@ public class SubGraphInitializeFromScratchTest : MonoBehaviour, IMonoBehaviourTe
 
 	JobHandle m_CreationJobHandle;
 
-	public bool IsTestFinished
-	{
-		get { return m_Finished; }
-	}
+	public bool IsTestFinished { get { return m_Finished; } }
 
 	bool m_Finished;
 
@@ -68,6 +65,7 @@ public class SubGraphInitializeFromScratchTest : MonoBehaviour, IMonoBehaviourTe
 		var firstEdgeById = m_InitJob.InputEdgesAsIDs[0];
 		var lastEdgeByIndex = m_InitJob.EdgesAsIndices[m_InitJob.EdgesAsIndices.Length - 1];
 		var lastEdgeById = m_InitJob.InputEdgesAsIDs[m_InitJob.InputEdgesAsIDs.Length - 1];
+		
 		Debug.LogFormat("first edge by id: {0} , by index: {1}", firstEdgeById, firstEdgeByIndex);
 		Debug.LogFormat("last edge by id: {0} , by index: {1}", lastEdgeById, lastEdgeByIndex);
 
@@ -97,5 +95,4 @@ public class SubGraphInitializeFromScratchTest : MonoBehaviour, IMonoBehaviourTe
 		m_InputEdgesById.Dispose();
 		m_VertexIdToLocalIndex.Dispose();
 	}
-
 }

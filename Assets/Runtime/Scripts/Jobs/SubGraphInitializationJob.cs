@@ -45,3 +45,40 @@ public struct InitializeSubGraphJob : IJob
         }
     }
 }
+
+public struct InitializeSubGraphArrayJob : IJob
+{
+    [ReadOnly]
+    public NativeArray<int> VertexIDs;
+
+    [ReadOnly]
+    public NativeArray<int2> InputEdgesAsIDs;
+    
+    [WriteOnly]
+    public NativeArray<int2> EdgesAsIndices;
+
+    public NativeHashMap<int, int> VertexIdToIndex;
+
+    public void Execute()
+    {
+        VertexIdToIndex.Clear();
+        for (int v = 0; v < VertexIDs.Length; v++)
+        {
+            VertexIdToIndex.TryAdd(VertexIDs[v], v);
+        }
+        
+        for (int e = 0; e < InputEdgesAsIDs.Length; e++)
+        {
+            var inputEdge = InputEdgesAsIDs[e];
+            var vertexIdA = inputEdge.x;
+            var vertexIdB = inputEdge.y;
+
+            // translate the representation of global vertex ids to subgraph vertex indices
+            int vertexIndexA, vertexIndexB;
+            VertexIdToIndex.TryGetValue(vertexIdA, out vertexIndexA);
+            VertexIdToIndex.TryGetValue(vertexIdB, out vertexIndexB);
+
+            EdgesAsIndices[e] = new int2(vertexIndexA, vertexIndexB);
+        }
+    }
+}
